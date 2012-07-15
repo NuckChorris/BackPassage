@@ -1,0 +1,15 @@
+{
+  "author": "Peter Lejeck <peter.lejeck@gmail.com>",
+  "name": "server.io",
+  "description": "A TCP/TLS communications system styled after socket.io, aimed at bidirectional inter-server communications.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "git://github.com/NuckChorris/server.io.git"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
