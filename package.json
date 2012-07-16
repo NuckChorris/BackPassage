@@ -6,7 +6,9 @@
   "repository": {
     "url": "git://github.com/NuckChorris/BackPassage.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "underscore": "1.3.x"
+  },
   "devDependencies": {},
   "optionalDependencies": {},
   "engines": {

@@ -1,4 +1,5 @@
 var net = require('net');
+var _ = require('_');
 
 var parser = exports.parser = function (socket) {
 	var events = new process.EventEmitter();
@@ -41,7 +42,10 @@ var parser = exports.parser = function (socket) {
 		}
 	});
 
-	return events;
+	var obj = _.extend(socket, events);
+	obj.socket = socket;
+
+	return obj;
 }
 
 exports.createServer = function (opts, fn) {
@@ -49,7 +53,6 @@ exports.createServer = function (opts, fn) {
 
 	var socket = net.createServer(function (socket) {
 		var obj = parser(socket);
-		obj.socket = socket;
 
 		fn(obj);
 	});
@@ -61,8 +64,6 @@ exports.connect = exports.createConnection = function () {
 	var socket = net.createConnection.apply(net, arguments);
 
 	var obj = parser(socket);
-
-	obj.socket = socket;
 
 	return obj;
 };
