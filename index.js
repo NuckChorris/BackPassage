@@ -1,19 +1,51 @@
 var net = require('net');
-var _ = require('_');
+
+var i = 0; // incremental message IDs
+
+var callbacks = {};
 
 var parser = exports.parser = function (socket) {
 	var events = new process.EventEmitter();
 	events._emit = events.emit;
 
-	events.emit = events.send = function (event, params) {
+	var send = function (event, id, payload) {
 		var args = Array.prototype.slice.apply(arguments);
 		socket.write(JSON.stringify(args) + "\0");
+	};
+
+	events.emit = function (event, payload, fn) {
+		var args = Array.prototype.slice.apply(arguments);
+		var id = i++;
+		args = [args[0], id].concat(args.slice(1));
+
+
+		if (args[0] === 'newListener') {
+			args.pop();
+		} else if (typeof args[args.length-1] === 'function') {
+			callbacks[args[0].toLowerCase()+'_'+id] = args.pop();
+		}
+		send.apply(null, args);
 	}
 
 	var buf = '';
 
 	var doThing = function (data) {
 		var data = JSON.parse(data);
+
+		var ev = data.shift();
+		var id = data.shift();
+		data.unshift(ev);
+
+
+		var callback = callbacks[ev.toLowerCase() + '_' + id];
+		if (callback) {
+			callback.apply(null, data);
+		}
+
+		data.push(function reply (payload) {
+			var args = Array.prototype.slice.apply(arguments);
+			send.apply(null, [ev, id].concat(args));
+		});
 
 		events._emit.apply(events, data);
 	}
@@ -42,10 +74,9 @@ var parser = exports.parser = function (socket) {
 		}
 	});
 
-	var obj = _.extend(socket, events);
-	obj.socket = socket;
+	events.socket = socket;
 
-	return obj;
+	return events;
 }
 
 exports.createServer = function (opts, fn) {
