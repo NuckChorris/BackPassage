@@ -1,12 +1,12 @@
 var net = require('net');
 
-var i = 0; // incremental message IDs
-
-var callbacks = {};
-
 var parser = exports.parser = function (socket) {
 	var events = new process.EventEmitter();
 	events._emit = events.emit;
+
+	var callbacks = {};
+
+	var i = 0; // incremental message IDs
 
 	var send = function (event, id, payload) {
 		var args = Array.prototype.slice.apply(arguments);
