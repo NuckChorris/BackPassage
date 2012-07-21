@@ -2,7 +2,7 @@
   "author": "Peter Lejeck <peter.lejeck@gmail.com>",
   "name": "backpassage",
   "description": "A TCP/TLS communications system styled after socket.io, aimed at bidirectional inter-server communications.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "repository": {
     "url": "git://github.com/NuckChorris/BackPassage.git"
   },
