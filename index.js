@@ -36,9 +36,9 @@ var parser = exports.parser = function (socket) {
 		var id = data.shift();
 		data.unshift(ev);
 
-
 		var callback = callbacks[ev.toLowerCase() + '_' + id];
 		if (callback) {
+			data.shift();
 			callback.apply(null, data);
 		}
 
