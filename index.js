@@ -83,6 +83,7 @@ exports.createServer = function (opts, fn) {
 	if (typeof opts === 'function') fn = opts;
 
 	var socket = net.createServer(function (socket) {
+		socket.type = 'server';
 		var obj = parser(socket);
 
 		fn(obj);
@@ -93,6 +94,8 @@ exports.createServer = function (opts, fn) {
 
 exports.connect = exports.createConnection = function () {
 	var socket = net.createConnection.apply(net, arguments);
+
+	socket.type = 'client';
 
 	var obj = parser(socket);
 
